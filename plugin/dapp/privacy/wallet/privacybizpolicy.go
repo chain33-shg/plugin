@@ -64,15 +64,9 @@ func (policy *privacyPolicy) Init(walletOperate wcom.WalletOperate, sub []byte) 
 }
 
 func (policy *privacyPolicy) OnCreateNewAccount(acc *types.Account) {
-	wg := policy.getWalletOperate().GetWaitGroup()
-	wg.Add(1)
-	go policy.rescanReqTxDetailByAddr(acc.Addr, wg)
 }
 
 func (policy *privacyPolicy) OnImportPrivateKey(acc *types.Account) {
-	wg := policy.getWalletOperate().GetWaitGroup()
-	wg.Add(1)
-	go policy.rescanReqTxDetailByAddr(acc.Addr, wg)
 }
 
 func (policy *privacyPolicy) OnAddBlockFinish(block *types.BlockDetail) {
@@ -90,7 +84,6 @@ func (policy *privacyPolicy) OnClose() {
 func (this *privacyPolicy) OnSetQueueClient() {
 	version := this.store.getVersion()
 	if version < PRIVACYDBVERSION {
-		this.rescanAllTxAddToUpdateUTXOs()
 		this.store.setVersion()
 	}
 }
